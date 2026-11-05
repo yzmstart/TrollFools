@@ -1,5 +1,5 @@
 {
-  "originHash" : "08bd011ac9eeadd9ae86947ad551bd3f63280ca552a6fb95614a8996e768e28f",
+  "originHash" : "e332d5628073e9668a5966a1002a42edf6469c8e9393f2dc4fba34b3e9d2c438",
   "pins" : [
     {
       "identity" : "ararchivekit",
@@ -29,21 +29,12 @@
       }
     },
     {
-      "identity" : "dpkgversion",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/Lakr233/DpkgVersion",
-      "state" : {
-        "revision" : "64f192ac8c74f334e5b610c3da9aa9b456502ced",
-        "version" : "1.0.4"
-      }
-    },
-    {
       "identity" : "machokit",
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/Lessica/MachOKit.git",
       "state" : {
         "branch" : "patch/trollfools",
-        "revision" : "889084f803dd4c922ea4c5985c77b796c38d79c2"
+        "revision" : "43c4b5d59ab75c91ad689fb4a39a8a3913229535"
       }
     },
     {
@@ -87,8 +78,8 @@
       "kind" : "remoteSourceControl",
       "location" : "https://github.com/siteline/swiftui-introspect.git",
       "state" : {
-        "revision" : "668a65735751432b640260c56dfa621cec568368",
-        "version" : "1.2.0"
+        "revision" : "3ba734dd20faada0e3234b68e78db97005315f0e",
+        "version" : "1.0.0"
       }
     },
     {
@@ -98,15 +89,6 @@
       "state" : {
         "revision" : "02b6abe5f6eef7e3cbd5f247c5cc24e246efcfe0",
         "version" : "0.9.19"
-      }
-    },
-    {
-      "identity" : "zstd",
-      "kind" : "remoteSourceControl",
-      "location" : "https://github.com/facebook/zstd.git",
-      "state" : {
-        "revision" : "f8745da6ff1ad1e7bab384bd1f9d742439278e99",
-        "version" : "1.5.7"
       }
     }
   ],
