@@ -16,7 +16,7 @@ final class InjectorV3 {
 
     static let temporaryRoot: URL = FileManager.default
         .urls(for: .cachesDirectory, in: .userDomainMask).first!
-        .appendingPathComponent(Constants.gAppIdentifier, isDirectory: true)
+        .appendingPathComponent(gTrollFoolsIdentifier, isDirectory: true)
         .appendingPathComponent("InjectorV3", isDirectory: true)
 
     static let main = try! InjectorV3(Bundle.main.bundleURL)
@@ -34,9 +34,7 @@ final class InjectorV3 {
 
     var useWeakReference: Bool = false
     var preferMainExecutable: Bool = false
-    var useFrameworkEnumerationFallback: Bool = true
     var injectStrategy: Strategy = .lexicographic
-    var didUseMachOEnumerationFallback: Bool = false
 
     let logger: DDLog
     let loggerType: LoggerType
@@ -118,18 +116,4 @@ final class InjectorV3 {
 
         return latestLogFileURL
     }
-
-    // MARK: - Persistent
-
-    static let persistentPlugInsRootURL: URL = {
-        let url = URL(fileURLWithPath: "/var/mobile/Library/TrollFools/PersistentPlugins")
-        try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
-        return url
-    }()
-
-    lazy var persistentPlugInsDirectoryURL: URL = {
-        let url = Self.persistentPlugInsRootURL.appendingPathComponent(appID, isDirectory: true)
-        try? FileManager.default.createDirectory(at: url, withIntermediateDirectories: true)
-        return url
-    }()
 }

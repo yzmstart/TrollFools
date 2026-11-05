@@ -25,97 +25,12 @@ struct AppListCell: View {
 
     @available(iOS 15, *)
     var highlightedId: AttributedString {
-        let bid = app.bid
-        var attributedString = AttributedString(bid)
+        let id = app.id
+        var attributedString = AttributedString(id)
         if let range = attributedString.range(of: appList.filter.searchKeyword, options: [.caseInsensitive, .diacriticInsensitive]) {
             attributedString[range].foregroundColor = .accentColor
         }
         return attributedString
-    }
-
-    var body: some View {
-        HStack(spacing: 12) {
-            if #available(iOS 15, *) {
-                Image(uiImage: app.alternateIcon ?? app.icon ?? UIImage())
-                    .resizable()
-                    .frame(width: 32, height: 32)
-            } else {
-                Image(uiImage: app.alternateIcon ?? app.icon ?? UIImage())
-                    .resizable()
-                    .frame(width: 32, height: 32)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
-            }
-
-            VStack(alignment: .leading, spacing: 2) {
-                HStack(spacing: 4) {
-                    if #available(iOS 15, *) {
-                        Text(highlightedName)
-                            .font(.headline)
-                            .lineLimit(1)
-                    } else {
-                        Text(app.name)
-                            .font(.headline)
-                            .lineLimit(1)
-                    }
-
-                    if app.isInjected || app.hasPersistedAssets {
-                        Image(systemName: app.isInjected ? "bandage" : "exclamationmark.triangle")
-                            .font(.subheadline)
-                            .foregroundColor(.orange)
-                            .accessibilityLabel(app.isInjected ? NSLocalizedString("Patched", comment: "") : NSLocalizedString("Includes Disabled PlugIns", comment: ""))
-                            .transition(.opacity)
-                    }
-                }
-                .animation(.easeOut, value: combines(
-                    app.isInjected,
-                    app.hasPersistedAssets
-                ))
-
-                if #available(iOS 15, *) {
-                    Text(highlightedId)
-                        .font(.subheadline)
-                        .lineLimit(app.isAdvertisement ? 2 : 1)
-                } else {
-                    Text(app.bid)
-                        .font(.subheadline)
-                        .lineLimit(app.isAdvertisement ? 2 : 1)
-                }
-            }
-
-            Spacer()
-
-            if let version = app.version {
-                if app.isUser && app.isDetached {
-                    HStack(spacing: 4) {
-                        Image(systemName: "lock")
-                            .font(.subheadline)
-                            .foregroundColor(.red)
-                            .accessibilityLabel(NSLocalizedString("Pinned Version", comment: ""))
-
-                        Text(version)
-                            .font(.subheadline)
-                            .foregroundColor(.secondary)
-                            .lineLimit(1)
-                    }
-                } else {
-                    Text(version)
-                        .font(.subheadline)
-                        .foregroundColor(.secondary)
-                        .lineLimit(1)
-                }
-            } else if app.isAdvertisement {
-                Image("badge-ad")
-                    .foregroundColor(.secondary)
-                    .scaleEffect(1.2)
-                    .accessibilityLabel(NSLocalizedString("This is an advertisement.", comment: ""))
-            }
-        }
-        .contextMenu {
-            if !appList.isSelectorMode && !app.isAdvertisement {
-                cellContextMenuWrapper
-            }
-        }
-        .background(cellBackground)
     }
 
     @ViewBuilder
@@ -193,8 +108,88 @@ struct AppListCell: View {
         }
     }
 
+    var body: some View {
+        HStack(spacing: 12) {
+            if #available(iOS 15, *) {
+                Image(uiImage: app.alternateIcon ?? app.icon ?? UIImage())
+                    .resizable()
+                    .frame(width: 32, height: 32)
+            } else {
+                Image(uiImage: app.alternateIcon ?? app.icon ?? UIImage())
+                    .resizable()
+                    .frame(width: 32, height: 32)
+                    .clipShape(RoundedRectangle(cornerRadius: 8))
+            }
+
+            VStack(alignment: .leading, spacing: 2) {
+                HStack(spacing: 4) {
+                    if #available(iOS 15, *) {
+                        Text(highlightedName)
+                            .font(.headline)
+                            .lineLimit(1)
+                    } else {
+                        Text(app.name)
+                            .font(.headline)
+                            .lineLimit(1)
+                    }
+
+                    if app.isInjected {
+                        Image(systemName: "bandage")
+                            .font(.subheadline)
+                            .foregroundColor(.orange)
+                            .accessibilityLabel(NSLocalizedString("Patched", comment: ""))
+                            .transition(.opacity)
+                    }
+                }
+                .animation(.easeOut, value: app.isInjected)
+
+                if #available(iOS 15, *) {
+                    Text(highlightedId)
+                        .font(.subheadline)
+                        .lineLimit(app.isAdvertisement ? 2 : 1)
+                } else {
+                    Text(app.id)
+                        .font(.subheadline)
+                        .lineLimit(app.isAdvertisement ? 2 : 1)
+                }
+            }
+
+            Spacer()
+
+            if let version = app.version {
+                if app.isUser && app.isDetached {
+                    HStack(spacing: 4) {
+                        Image(systemName: "lock")
+                            .font(.subheadline)
+                            .foregroundColor(.red)
+                            .accessibilityLabel(NSLocalizedString("Pinned Version", comment: ""))
+
+                        Text(version)
+                            .font(.subheadline)
+                            .foregroundColor(.secondary)
+                            .lineLimit(1)
+                    }
+                } else {
+                    Text(version)
+                        .font(.subheadline)
+                        .foregroundColor(.secondary)
+                        .lineLimit(1)
+                }
+            } else if app.isAdvertisement {
+                Image("badge-ad")
+                    .scaleEffect(1.2)
+            }
+        }
+        .contextMenu {
+            if !appList.isSelectorMode && !app.isAdvertisement {
+                cellContextMenuWrapper
+            }
+        }
+        .background(cellBackground)
+    }
+
     private func launch() {
-        LSApplicationWorkspace.default().openApplication(withBundleID: app.bid)
+        LSApplicationWorkspace.default().openApplication(withBundleID: app.id)
     }
 
     var isFilzaInstalled: Bool { appList.isFilzaInstalled }

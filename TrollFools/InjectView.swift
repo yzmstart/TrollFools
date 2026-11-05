@@ -9,31 +9,24 @@ import CocoaLumberjackSwift
 import SwiftUI
 
 struct InjectView: View {
-    struct SuccessPayload {
-        let logFileURL: URL?
-        let didUseFallback: Bool
-    }
-
     @EnvironmentObject var appList: AppListModel
 
     let app: App
     let urlList: [URL]
 
-    @State var injectResult: Result<SuccessPayload, Error>?
+    @State var injectResult: Result<URL?, Error>?
     @StateObject fileprivate var viewControllerHost = ViewControllerHost()
 
     @AppStorage var useWeakReference: Bool
     @AppStorage var preferMainExecutable: Bool
-    @AppStorage var useFrameworkEnumerationFallback: Bool
     @AppStorage var injectStrategy: InjectorV3.Strategy
 
     init(_ app: App, urlList: [URL]) {
         self.app = app
         self.urlList = urlList
-        _useWeakReference = AppStorage(wrappedValue: true, "UseWeakReference-\(app.bid)")
-        _preferMainExecutable = AppStorage(wrappedValue: false, "PreferMainExecutable-\(app.bid)")
-        _useFrameworkEnumerationFallback = AppStorage(wrappedValue: true, "UseFrameworkEnumerationFallback-\(app.bid)")
-        _injectStrategy = AppStorage(wrappedValue: .lexicographic, "InjectStrategy-\(app.bid)")
+        _useWeakReference = AppStorage(wrappedValue: true, "UseWeakReference-\(app.id)")
+        _preferMainExecutable = AppStorage(wrappedValue: false, "PreferMainExecutable-\(app.id)")
+        _injectStrategy = AppStorage(wrappedValue: .lexicographic, "InjectStrategy-\(app.id)")
     }
 
     var body: some View {
@@ -56,13 +49,10 @@ struct InjectView: View {
         VStack {
             if let injectResult {
                 switch injectResult {
-                case let .success(payload):
+                case let .success(url):
                     SuccessView(
                         title: NSLocalizedString("Completed", comment: ""),
-                        subtitle: payload.didUseFallback
-                            ? NSLocalizedString("Completed with compatibility mode. The plug-in may start working after opening some app features.", comment: "")
-                            : nil,
-                        logFileURL: payload.logFileURL
+                        logFileURL: url
                     )
                     .onAppear {
                         app.reload()
@@ -104,7 +94,7 @@ struct InjectView: View {
             viewControllerHost.viewController = viewController
         }
         .onAppear {
-            DispatchQueue.global(qos: .userInitiated).async {
+            DispatchQueue.global(qos: .userInteractive).async {
                 let result = inject()
 
                 DispatchQueue.main.async {
@@ -117,7 +107,7 @@ struct InjectView: View {
         }
     }
 
-    private func inject() -> Result<SuccessPayload, Error> {
+    private func inject() -> Result<URL?, Error> {
         var logFileURL: URL?
 
         do {
@@ -125,7 +115,7 @@ struct InjectView: View {
             logFileURL = injector.latestLogFileURL
 
             if injector.appID.isEmpty {
-                injector.appID = app.bid
+                injector.appID = app.id
             }
 
             if injector.teamID.isEmpty {
@@ -134,14 +124,10 @@ struct InjectView: View {
 
             injector.useWeakReference = useWeakReference
             injector.preferMainExecutable = preferMainExecutable
-            injector.useFrameworkEnumerationFallback = useFrameworkEnumerationFallback
             injector.injectStrategy = injectStrategy
 
-            try injector.inject(urlList, shouldPersist: true)
-            return .success(SuccessPayload(
-                logFileURL: injector.latestLogFileURL,
-                didUseFallback: injector.didUseMachOEnumerationFallback
-            ))
+            try injector.inject(urlList)
+            return .success(injector.latestLogFileURL)
 
         } catch {
             DDLogError("\(error)", ddlog: InjectorV3.main.logger)
@@ -154,9 +140,7 @@ struct InjectView: View {
                 userInfo[NSURLErrorKey] = logFileURL
             }
 
-            let nsErr = NSError(domain: Constants.gErrorDomain, code: 0, userInfo: userInfo)
-
-            return .failure(nsErr)
+            return .failure(NSError(domain: gTrollFoolsErrorDomain, code: 0, userInfo: userInfo))
         }
     }
 }

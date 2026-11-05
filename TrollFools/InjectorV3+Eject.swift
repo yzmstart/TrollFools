@@ -11,31 +11,13 @@ import Foundation
 extension InjectorV3 {
     // MARK: - Instance Methods
 
-    func ejectAll(shouldDesist: Bool) throws {
-        var assetURLs: [URL]
-
-        assetURLs = injectedAssetURLsInBundle(bundleURL)
-        if !assetURLs.isEmpty {
-            try eject(assetURLs, shouldDesist: shouldDesist)
-        }
-
-        if shouldDesist {
-            assetURLs = persistedAssetURLs(bid: appID)
-            if !assetURLs.isEmpty {
-                desist(assetURLs)
-            }
-        }
+    func ejectAll() throws {
+        try eject(injectedAssetURLsInBundle(bundleURL))
     }
 
-    func eject(_ assetURLs: [URL], shouldDesist: Bool) throws {
+    func eject(_ assetURLs: [URL]) throws {
         precondition(!assetURLs.isEmpty, "No asset to eject.")
         terminateApp()
-
-        if shouldDesist {
-            desist(assetURLs)
-        } else {
-            persistIfNecessary(assetURLs)
-        }
 
         try ejectBundles(assetURLs
             .filter { $0.pathExtension.lowercased() == "bundle" })

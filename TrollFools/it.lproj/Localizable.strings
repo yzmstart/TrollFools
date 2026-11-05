@@ -16,29 +16,11 @@
 /* No comment provided by engineer. */
 "Advertisement" = "Advertisement";
 
-/* TODO */
-"After the app upgrade, any injected plugins will be disabled. You will need to manually re-enable them." = "After the app upgrade, any injected plugins will be disabled. You will need to manually re-enable them.";
-
-/* TODO */
-"All" = "All";
-
-/* TODO */
-"All Applications" = "All Applications";
-
 /* No comment provided by engineer. */
 "And %d more unsupported user applications." = "E %d più non supportate dalle applicazioni.";
 
-/* TODO */
-"Are you sure you want to eject all plug-ins? This action cannot be undone." = "Are you sure you want to eject all plug-ins? This action cannot be undone.";
-
-/* No comment provided by engineer. */
-"AutoRun" = "AutoRun";
-
 /* No comment provided by engineer. */
 "Bringing back the most advanced system and security analysis tool." = "Portiamo indietro il più avanzato strumento di analisi di sistema e della sicurezza.";
-
-/* TODO */
-"Buy our paid products to support us if you like TrollFools!" = "Buy our paid products to support us if you like TrollFools!";
 
 /* StripedTextTableViewController */
 "Cancel" = "Cancella";
@@ -49,17 +31,11 @@
 /* No comment provided by engineer. */
 "Completed" = "Completato";
 
-/* TODO */
-"Completed with compatibility mode. The plug-in may start working after opening some app features." = "Completed with compatibility mode. The plug-in may start working after opening some app features.";
-
 /* StripedTextTableViewController */
 "Confirm" = "Conferma";
 
 /* TODO */
 "Continue" = "Continue";
-
-/* TODO */
-"Continue and Don’t Show Again" = "Continue and Don’t Show Again";
 
 /* StripedTextTableViewController */
 "Copy" = "Copia";
@@ -67,26 +43,17 @@
 /* No comment provided by engineer. */
 "Copyright" = "Copyright";
 
-/* TODO */
-"Disable All" = "Disable All";
-
 /* StripedTextTableViewController */
 "Do you want to clear this log file “%@”?" = "Vuoi cancellare questo log “%@”?";
 
 /* No comment provided by engineer. */
 "Done" = "Fatto";
 
-/* TODO */
-"Enable Compatibility Fallback" = "Enable Compatibility Fallback";
-
 /* No comment provided by engineer. */
 "Eject" = "Espelli";
 
 /* No comment provided by engineer. */
 "Eject All" = "Espelli Tutti";
-
-/* TODO */
-"Enable All" = "Enable All";
 
 /* No comment provided by engineer. */
 "Error" = "Errore";
@@ -115,29 +82,14 @@
 /* No comment provided by engineer. */
 "Fast" = "Veloce";
 
-/* TODO */
-"Fast, feature-rich VNC server for iOS: remote control made simple." = "Fast, feature-rich VNC server for iOS: remote control made simple.";
-
-/* TODO */
-"If needed, TrollFools will use a compatibility mode to improve success rate. Keeping this on is recommended." = "If needed, TrollFools will use a compatibility mode to improve success rate. Keeping this on is recommended.";
-
 /* No comment provided by engineer. */
 "Filza (URL Scheme) Not Installed" = "Filza (URL Scheme) Non Installato";
-
-/* TODO */
-"Full-Fledged Automation Framework for TrollStore." = "Full-Fledged Automation Framework for TrollStore.";
 
 /* No comment provided by engineer. */
 "Hide" = "Hide";
 
 /* No comment provided by engineer. */
 "If you do not know what these options mean, please do not change them." = "Se non sai cosa significano queste opzioni, non cambiarle.";
-
-/* TODO */
-"Choose how TrollFools tries possible targets. If the plug-in does not work as expected, try another option." = "Choose how TrollFools tries possible targets. If the plug-in does not work as expected, try another option.";
-
-/* TODO */
-"Includes Disabled PlugIns" = "Includes Disabled PlugIns";
 
 /* No comment provided by engineer. */
 "Inject" = "Inietta";
@@ -158,13 +110,7 @@
 "Injection Strategy" = "Strategia Inietazione";
 
 /* No comment provided by engineer. */
-"Keep your everyday apps ready." = "Tieni le tue app di ogni giorno sempre pronte.";
-
-/* No comment provided by engineer. */
 "Launch" = "Lancia";
-
-/* TODO */
-"Lessica, huami1314, iosdump and other contributors" = "Lessica, huami1314, iosdump and other contributors";
 
 /* No comment provided by engineer. */
 "Lexicographic" = "Lessicografico";
@@ -175,14 +121,8 @@
 /* StripedTextTableViewController */
 "Log Viewer" = "Visualizzatore Log";
 
-/* TODO */
-"Manage" = "Manage";
-
-/* TODO */
-"Manage %d Plug-Ins" = "Manage %d Plug-Ins";
-
-/* TODO */
-"New version %@ available!" = "New version %@ available!";
+/* No comment provided by engineer. */
+"Made with ♥ by OwnGoal Studio" = "Fatto col ♥ da OwnGoal Studio";
 
 /* No comment provided by engineer. */
 "No Applications" = "No Applications";
@@ -226,9 +166,6 @@
 /* No comment provided by engineer. */
 "Prefer Main Executable" = "Preferisci Eseguibile Principale";
 
-/* TODO */
-"Try the app’s main file first. Turn this on when the plug-in does not seem active." = "Try the app’s main file first. Turn this on when the plug-in does not seem active.";
-
 /* No comment provided by engineer. */
 "Rebuild Icon Cache" = "Ricrostruisci Cache Icone";
 
@@ -243,9 +180,6 @@
 
 /* No comment provided by engineer. */
 "Search…" = "Cerca…";
-
-/* TODO */
-"Select an application to view details." = "Select an application to view details.";
 
 /* No comment provided by engineer. */
 "Select Application to Inject" = "Scegli Applicazione da Iniettare";
@@ -268,9 +202,6 @@
 /* No comment provided by engineer. */
 "The content of text file “%@” is empty." = "Il contenuto del file “%@” è vuoto.";
 
-/* TODO */
-"This is an advertisement." = "This is an advertisement.";
-
 /* No comment provided by engineer. */
 "TrollFools" = "TrollFools";
 
@@ -284,9 +215,6 @@
 "TrollStore Applications" = "Applicazioni TrollStore";
 
 /* TODO */
-"TrollVNC" = "TrollVNC";
-
-/* TODO */
 "Unable to locate the data archive in the Debian package." = "Unable to locate the data archive in the Debian package.";
 
 /* No comment provided by engineer. */
@@ -296,9 +224,6 @@
 "Use Weak Reference" = "Usa referenza debole";
 
 /* TODO */
-"Controls whether the app crashes when the plug-in cannot be found. Keeping this on can reduce unexpected crashes in some scenarios, but the plug-in will not work in those cases." = "Controls whether the app crashes when the plug-in cannot be found. Keeping this on can reduce unexpected crashes in some scenarios, but the plug-in will not work in those cases.";
-
-/* TODO */
 "User" = "User";
 
 /* No comment provided by engineer. */
@@ -306,9 +231,6 @@
 
 /* No comment provided by engineer. */
 "View Logs" = "Mostra Log";
-
-/* TODO */
-"XXTouch Elite TS" = "XXTouch Elite TS";
 
 /* No comment provided by engineer. */
 "You need to rebuild the icon cache in TrollStore to apply changes." = "Devi ricostruire la cache delle icone in TrollStore per applicare le modifiche.";

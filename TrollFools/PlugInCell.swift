@@ -17,10 +17,8 @@ private let gDateFormatter: DateFormatter = {
 
 struct PlugInCell: View {
     @EnvironmentObject var ejectList: EjectListModel
-    @Environment(\.verticalSizeClass) var verticalSizeClass
 
     @Binding var quickLookExport: URL?
-    @State var isEnabled: Bool = false
 
     let plugIn: InjectedPlugIn
 
@@ -54,38 +52,25 @@ struct PlugInCell: View {
     }
 
     var body: some View {
-        Toggle(isOn: $isEnabled) {
-            HStack(spacing: 12) {
-                if verticalSizeClass == .compact {
-                    Image(systemName: iconName)
-                        .resizable()
-                        .aspectRatio(contentMode: .fit)
-                        .frame(width: 24, height: 24)
-                        .foregroundColor(.accentColor)
+        HStack(spacing: 12) {
+            Image(systemName: iconName)
+                .resizable()
+                .aspectRatio(contentMode: .fit)
+                .frame(width: 24, height: 24)
+                .foregroundColor(.accentColor)
+
+            VStack(alignment: .leading) {
+                if #available(iOS 15, *) {
+                    Text(highlightedName)
+                        .font(.headline)
+                } else {
+                    Text(plugIn.url.lastPathComponent)
+                        .font(.headline)
                 }
 
-                VStack(alignment: .leading) {
-                    if #available(iOS 15, *) {
-                        Text(highlightedName)
-                            .font(.headline)
-                            .lineLimit(2)
-                    } else {
-                        Text(plugIn.url.lastPathComponent)
-                            .font(.headline)
-                            .lineLimit(2)
-                    }
-
-                    Text(gDateFormatter.string(from: plugIn.createdAt))
-                        .font(.subheadline)
-                        .lineLimit(1)
-                }
+                Text(gDateFormatter.string(from: plugIn.createdAt))
+                    .font(.subheadline)
             }
-        }
-        .onAppear {
-            isEnabled = plugIn.isEnabled
-        }
-        .onChange(of: isEnabled) { value in
-            ejectList.togglePlugIn(plugIn, isEnabled: value)
         }
         .contextMenu {
             if #available(iOS 16.4, *) {
