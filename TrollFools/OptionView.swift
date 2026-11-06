@@ -10,8 +10,6 @@ import SwiftUI
 struct OptionView: View {
     let app: App
 
-    @Environment(\.verticalSizeClass) var verticalSizeClass
-
     @State var isImporterPresented = false
     @State var isImporterSelected = false
 
@@ -19,9 +17,8 @@ struct OptionView: View {
     @State var temporaryResult: Result<[URL], any Error>?
 
     @State var isSettingsPresented = false
-    @State var importerResult: Result<[URL], any Error>?
 
-    @State var numberOfPlugIns: Int = 0
+    @State var importerResult: Result<[URL], any Error>?
 
     @AppStorage("isWarningHidden")
     var isWarningHidden: Bool = false
@@ -32,7 +29,7 @@ struct OptionView: View {
 
     var body: some View {
         if #available(iOS 15, *) {
-            wrappedContent
+            content
                 .alert(
                     NSLocalizedString("Notice", comment: ""),
                     isPresented: $isWarningPresented,
@@ -58,17 +55,13 @@ struct OptionView: View {
                         Text(NSLocalizedString("Cancel", comment: ""))
                     }
                 } message: {
-                    if case let .success(urls) = $0 {
+                    if case .success(let urls) = $0 {
                         Text(Self.warningMessage(urls))
                     }
                 }
         } else {
-            wrappedContent
+            content
         }
-    }
-
-    var wrappedContent: some View {
-        content.toolbar { toolbarContent }
     }
 
     var content: some View {
@@ -79,7 +72,7 @@ struct OptionView: View {
                 Button {
                     isImporterPresented = true
                 } label: {
-                    OptionCell(option: .attach, detachCount: 0)
+                    OptionCell(option: .attach)
                 }
                 .accessibilityLabel(NSLocalizedString("Inject", comment: ""))
 
@@ -88,24 +81,18 @@ struct OptionView: View {
                 NavigationLink {
                     EjectListView(app)
                 } label: {
-                    OptionCell(option: .detach, detachCount: numberOfPlugIns)
+                    OptionCell(option: .detach)
                 }
-                .accessibilityLabel(
-                    numberOfPlugIns == 0
-                        ? NSLocalizedString("Manage", comment: "")
-                        : String(format: NSLocalizedString("Manage %d Plug-Ins", comment: ""), numberOfPlugIns)
-                )
+                .accessibilityLabel(NSLocalizedString("Eject", comment: ""))
 
                 Spacer()
             }
 
-            if verticalSizeClass == .regular {
-                Button {
-                    isSettingsPresented = true
-                } label: {
-                    Label(NSLocalizedString("Advanced Settings", comment: ""),
-                          systemImage: "gear")
-                }
+            Button {
+                isSettingsPresented = true
+            } label: {
+                Label(NSLocalizedString("Advanced Settings", comment: ""),
+                      systemImage: "gear")
             }
         }
         .padding()
@@ -114,10 +101,10 @@ struct OptionView: View {
             NavigationLink(isActive: $isImporterSelected) {
                 if let result = importerResult {
                     switch result {
-                    case let .success(urls):
+                    case .success(let urls):
                         InjectView(app, urlList: urls
                             .sorted(by: { $0.lastPathComponent < $1.lastPathComponent }))
-                    case let .failure(error):
+                    case .failure(let error):
                         FailureView(
                             title: NSLocalizedString("Error", comment: ""),
                             error: error
@@ -126,9 +113,6 @@ struct OptionView: View {
                 }
             } label: { }
         })
-        .onAppear {
-            recalculatePlugInCount()
-        }
         .fileImporter(
             isPresented: $isImporterPresented,
             allowedContentTypes: [
@@ -143,15 +127,14 @@ struct OptionView: View {
         ) {
             result in
             switch result {
-            case let .success(theSuccess):
-                if #available(iOS 15, *) {
-                    if !isWarningHidden && theSuccess.contains(where: { $0.pathExtension.lowercased() == "deb" }) {
-                        temporaryResult = result
-                        isWarningPresented = true
-                        return
-                    }
+            case .success(let theSuccess):
+                if !isWarningHidden && theSuccess.contains(where: { $0.pathExtension.lowercased() == "deb" }) {
+                    temporaryResult = result
+                    isWarningPresented = true
+                } else {
+                    importerResult = result
+                    isImporterSelected = true
                 }
-                fallthrough
             case .failure:
                 importerResult = result
                 isImporterSelected = true
@@ -167,33 +150,10 @@ struct OptionView: View {
         }
     }
 
-    @ToolbarContentBuilder
-    var toolbarContent: some ToolbarContent {
-        ToolbarItemGroup(placement: .topBarTrailing) {
-            if verticalSizeClass == .compact {
-                Button {
-                    isSettingsPresented = true
-                } label: {
-                    Label(NSLocalizedString("Advanced Settings", comment: ""),
-                          systemImage: "gear")
-                }
-            }
-        }
-    }
-
     static func warningMessage(_ urls: [URL]) -> String {
         guard let firstDylibName = urls.first(where: { $0.pathExtension.lowercased() == "deb" })?.lastPathComponent else {
             fatalError("No debian package found.")
         }
         return String(format: NSLocalizedString("You’ve selected at least one Debian Package “%@”. We’re here to remind you that it will not work as it was in a jailbroken environment. Please make sure you know what you’re doing.", comment: ""), firstDylibName)
-    }
-
-    private func recalculatePlugInCount() {
-        var urls = [URL]()
-        urls += InjectorV3.main.injectedAssetURLsInBundle(app.url)
-        let enabledNames = urls.map { $0.lastPathComponent }
-        urls += InjectorV3.main.persistedAssetURLs(bid: app.bid)
-            .filter { !enabledNames.contains($0.lastPathComponent) }
-        numberOfPlugIns = urls.count
     }
 }

@@ -45,12 +45,12 @@ struct CmdEject: ParsableCommand {
         if let pluginPath {
             if let pluginURL = URL(string: pluginPath),
                FileManager.default.fileExists(atPath: pluginPath) {
-                try InjectorV3(bundleURL, loggerType: .os).eject([pluginURL], shouldDesist: true)
+                try InjectorV3(bundleURL, loggerType: .os).eject([pluginURL])
             } else {
                 throw ArgumentParser.ValidationError("The specified plugin path is invalid.")
             }
         } else if ejectAll {
-            try InjectorV3(bundleURL, loggerType: .os).ejectAll(shouldDesist: true)
+            try InjectorV3(bundleURL, loggerType: .os).ejectAll()
         } else {
             throw ArgumentParser.ValidationError("No plugin to eject.")
         }

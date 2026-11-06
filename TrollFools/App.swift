@@ -8,8 +8,8 @@
 import Combine
 import Foundation
 
-final class App: ObservableObject {
-    let bid: String
+final class App: Identifiable, ObservableObject {
+    let id: String
     let name: String
     let latinName: String
     let type: String
@@ -18,17 +18,16 @@ final class App: ObservableObject {
     let version: String?
     let isAdvertisement: Bool
 
-    @Published var isDetached: Bool
+    @Published var isDetached: Bool = false
     @Published var isAllowedToAttachOrDetach: Bool
-    @Published var isInjected: Bool
-    @Published var hasPersistedAssets: Bool
+    @Published var isInjected: Bool = false
 
-    lazy var icon: UIImage? = UIImage._applicationIconImage(forBundleIdentifier: bid, format: 0, scale: 3.0)
+    lazy var icon: UIImage? = UIImage._applicationIconImage(forBundleIdentifier: id, format: 0, scale: 3.0)
     var alternateIcon: UIImage?
 
     lazy var isUser: Bool = type == "User"
     lazy var isSystem: Bool = !isUser
-    lazy var isFromApple: Bool = bid.hasPrefix("com.apple.")
+    lazy var isFromApple: Bool = id.hasPrefix("com.apple.")
     lazy var isFromTroll: Bool = isSystem && !isFromApple
     lazy var isRemovable: Bool = url.path.contains("/var/containers/Bundle/Application/")
 
@@ -37,7 +36,7 @@ final class App: ObservableObject {
     private static let reloadSubject = PassthroughSubject<String, Never>()
 
     init(
-        bid: String,
+        id: String,
         name: String,
         type: String,
         teamID: String,
@@ -46,7 +45,7 @@ final class App: ObservableObject {
         alternateIcon: UIImage? = nil,
         isAdvertisement: Bool = false
     ) {
-        self.bid = bid
+        self.id = id
         self.name = name
         self.type = type
         self.teamID = teamID
@@ -55,7 +54,6 @@ final class App: ObservableObject {
         self.isDetached = InjectorV3.main.isMetadataDetachedInBundle(url)
         self.isAllowedToAttachOrDetach = type == "User" && InjectorV3.main.isAllowedToAttachOrDetachMetadataInBundle(url)
         self.isInjected = InjectorV3.main.checkIsInjectedAppBundle(url)
-        self.hasPersistedAssets = InjectorV3.main.hasPersistedAssets(bid: bid)
         self.alternateIcon = alternateIcon
         self.isAdvertisement = isAdvertisement
         self.latinName = name
@@ -64,7 +62,7 @@ final class App: ObservableObject {
             .components(separatedBy: .whitespaces)
             .joined() ?? ""
         Self.reloadSubject
-            .filter { $0 == bid }
+            .filter { $0 == id }
             .sink { [weak self] _ in
                 self?._reload()
             }
@@ -72,7 +70,7 @@ final class App: ObservableObject {
     }
 
     func reload() {
-        Self.reloadSubject.send(bid)
+        Self.reloadSubject.send(id)
     }
 
     private func _reload() {
@@ -87,6 +85,6 @@ final class App: ObservableObject {
 
     private func reloadInjectedStatus() {
         self.isInjected = InjectorV3.main.checkIsInjectedAppBundle(url)
-        self.hasPersistedAssets = InjectorV3.main.hasPersistedAssets(bid: bid)
     }
 }
+

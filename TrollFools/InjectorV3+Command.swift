@@ -360,7 +360,7 @@ extension InjectorV3 {
                 return execURL
             }
         }
-        if let tfProxy = LSApplicationProxy(forIdentifier: Constants.gAppIdentifier),
+        if let tfProxy = LSApplicationProxy(forIdentifier: gTrollFoolsIdentifier),
            let tfBundleURL = tfProxy.bundleURL()
         {
             let execURL = tfBundleURL.appendingPathComponent(name)

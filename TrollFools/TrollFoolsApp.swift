@@ -10,7 +10,7 @@ import SwiftUI
 @main
 struct TrollFoolsApp: SwiftUI.App {
 
-    @AppStorage("isDisclaimerHiddenV2")
+    @AppStorage("isDisclaimerHidden")
     var isDisclaimerHidden: Bool = false
 
     init() {

@@ -10,7 +10,6 @@ import SwiftUI
 struct SuccessView: View {
 
     let title: String
-    let subtitle: String?
     let logFileURL: URL?
 
     @State private var isLogsPresented = false
@@ -24,11 +23,6 @@ struct SuccessView: View {
             Text(title)
                 .font(.title)
                 .bold()
-
-            if let subtitle {
-                Text(subtitle)
-                    .font(.title3)
-            }
 
             if logFileURL != nil {
                 Button {
@@ -52,7 +46,6 @@ struct SuccessView: View {
 #Preview {
     SuccessView(
         title: "Hello, World!",
-        subtitle: nil,
         logFileURL: nil
     )
 }
